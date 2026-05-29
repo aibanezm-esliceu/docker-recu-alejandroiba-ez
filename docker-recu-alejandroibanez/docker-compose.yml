@@ -82,7 +82,7 @@ services:
 
     volumes:
 
-      - ../projecte-recu:/src
+      - ../projecte-ibanez:/src
 
     command: sh -c "npm install -g browser-sync && browser-sync start --proxy 'web:80' --files '/src/**/*.*' --no-ui --host 0.0.0.0 --port 3002"
 
