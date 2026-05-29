@@ -1,48 +1,91 @@
 services:
-web:
-build: .
-container_name: projecte-recu-aibanez
-ports:
-- "8086:80"
-volumes:
-- ../projecte-recu:/var/www/html
-depends_on:
-db:
-condition: service_started
-db:
-image: mariadb:11
-container_name: mariadb-recu
-restart: always
-environment:
-MYSQL_ROOT_PASSWORD: root
-MYSQL_DATABASE: recu_db
-MYSQL_USER: recu
-MYSQL_PASSWORD: recu123
-volumes:
-- ./db-recu:/var/lib/mysql
-ports:
-- "3309:3306"
-phpmyadmin:
-image: phpmyadmin/phpmyadmin:latest
-container_name: phpmyadmin-recu
-restart: always
-depends_on:
-- db
-environment:
-PMA_HOST: recu_db
-PMA_USER: recu
-PMA_PASSWORD: recu123
-ports:
-- "8087:80"
-browsersync:
-image: node:20-alpine
-container_name: browsersync-recu
-working_dir: /app
-depends_on:
-- web
-volumes:
-- ../projecte-recu:/src
-command: sh -c "npm install -g browser-sync && browser-sync start --proxy 'web:80' --files
-'/src/**/*.* --no-ui --host 0.0.0.0 --port 3002"
-ports:
-- "3003:3002"
+
+  web:
+
+    build: .
+
+    container_name: projecte-recu
+
+    ports:
+
+      - "8085:80"
+
+    volumes:
+
+      - ../projecte-recu:/var/www/html
+
+    depends_on:
+
+      - db
+
+  db:
+
+    image: mariadb:11
+
+    container_name: mariadb-recu
+
+    restart: always
+
+    environment:
+
+      MYSQL_ROOT_PASSWORD: root
+
+      MYSQL_DATABASE: recu_db
+
+      MYSQL_USER: recu
+
+      MYSQL_PASSWORD: recu123
+
+    volumes:
+
+      - ./db-recu:/var/lib/mysql
+
+    ports:
+
+      - "3309:3306"
+
+  phpmyadmin:
+
+    image: phpmyadmin/phpmyadmin:latest
+
+    container_name: phpmyadmin-recu
+
+    restart: always
+
+    depends_on:
+
+      - db
+
+    environment:
+
+      PMA_HOST: db
+
+      PMA_USER: recu
+
+      PMA_PASSWORD: recu123
+
+    ports:
+
+      - "8086:80"
+
+  browsersync:
+
+    image: node:20-alpine
+
+    container_name: browsersync-recu
+
+    working_dir: /app
+
+    depends_on:
+
+      - web
+
+    volumes:
+
+      - ../projecte-recu:/src
+
+    command: sh -c "npm install -g browser-sync && browser-sync start --proxy 'web:80' --files '/src/**/*.*' --no-ui --host 0.0.0.0 --port 3002"
+
+    ports:
+
+      - "3005:3002"
