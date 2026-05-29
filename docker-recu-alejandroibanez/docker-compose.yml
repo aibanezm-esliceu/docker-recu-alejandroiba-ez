@@ -12,7 +12,7 @@ services:
 
     volumes:
 
-      - ../projecte-recu:/var/www/html
+      - ../projecte-recu-alejandroibanez:/var/www/html
 
     depends_on:
 
